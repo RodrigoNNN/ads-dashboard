@@ -96,8 +96,36 @@ def extract_client(campaign_name):
     return campaign_name[:40]
 
 
+def fetch_ad_statuses(account_id, token):
+    """Fetch effective_status for all ads in an account."""
+    cmd = [
+        "curl", "-s", "-G",
+        f"https://graph.facebook.com/v19.0/{account_id}/ads",
+        "--data-urlencode", "fields=id,name,effective_status,campaign{effective_status}",
+        "--data-urlencode", "limit=500",
+        "--data-urlencode", f"access_token={token}"
+    ]
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    try:
+        data = json.loads(result.stdout)
+    except json.JSONDecodeError:
+        return {}
+
+    statuses = {}
+    for ad in data.get("data", []):
+        ad_name = ad.get("name", "")
+        statuses[ad_name] = {
+            "ad_status": ad.get("effective_status", "UNKNOWN"),
+            "campaign_status": ad.get("campaign", {}).get("effective_status", "UNKNOWN"),
+        }
+    return statuses
+
+
 def fetch_account_data(account_id, account_info, token, since, until):
     """Fetch ad-level insights for one account."""
+    # First get ad statuses
+    statuses = fetch_ad_statuses(account_id, token)
+
     cmd = [
         "curl", "-s", "-G",
         f"https://graph.facebook.com/v19.0/{account_id}/insights",
@@ -161,11 +189,18 @@ def fetch_account_data(account_id, account_info, token, since, until):
         cost_schedule = round(spend / schedules, 2) if schedules > 0 else None
         cost_arrival = round(spend / arrivals, 2) if arrivals > 0 else None
 
+        # Get status from lookup
+        ad_status_info = statuses.get(ad_name, {})
+        ad_status = ad_status_info.get("ad_status", "UNKNOWN")
+        campaign_status = ad_status_info.get("campaign_status", "UNKNOWN")
+
         ads.append({
             "account": account_info["name"],
             "client": extract_client(campaign_name),
             "campaign": campaign_name,
+            "campaign_status": campaign_status,
             "ad": ad_name,
+            "ad_status": ad_status,
             "spend": round(spend, 2),
             "leads": leads,
             "cpl": cpl,
