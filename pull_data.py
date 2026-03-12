@@ -161,7 +161,8 @@ def fetch_account_data(account_id, account_info, token, since, until):
 
         # Parse actions
         actions = row.get("actions", [])
-        leads = 0
+        pixel_leads = 0
+        native_leads = 0
         purchases = 0
         complete_registrations = 0
         schedules = 0
@@ -172,7 +173,9 @@ def fetch_account_data(account_id, account_info, token, since, until):
             val = int(float(a.get("value", 0)))
 
             if at == "offsite_conversion.fb_pixel_lead":
-                leads = val
+                pixel_leads = val
+            elif at == "lead":
+                native_leads = val
             elif at == "offsite_conversion.fb_pixel_purchase":
                 purchases = val
             elif at == "offsite_conversion.fb_pixel_complete_registration":
@@ -181,6 +184,9 @@ def fetch_account_data(account_id, account_info, token, since, until):
                 arrivals = val
             elif sch_cc and at == f"offsite_conversion.custom.{sch_cc}":
                 schedules = val
+
+        # Use pixel leads if available, otherwise native leads (Instant Forms)
+        leads = pixel_leads if pixel_leads > 0 else native_leads
 
         # Calculate costs
         cpl = round(spend / leads, 2) if leads > 0 else None
