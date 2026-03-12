@@ -196,6 +196,7 @@
 
   .col-account { max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
   .col-client { max-width: 140px; overflow: hidden; text-overflow: ellipsis; font-weight: 600; color: #fff; }
+  .col-treatment { max-width: 160px; overflow: hidden; text-overflow: ellipsis; color: #a78bfa; font-size: 12px; }
   .col-campaign { max-width: 200px; overflow: hidden; text-overflow: ellipsis; font-size: 12px; color: #71717a; }
   .col-ad { max-width: 180px; overflow: hidden; text-overflow: ellipsis; }
 
@@ -278,6 +279,9 @@
   <select class="filter-select" id="account-filter">
     <option value="">All Accounts</option>
   </select>
+  <select class="filter-select" id="treatment-filter">
+    <option value="">All Treatments</option>
+  </select>
 </div>
 
 <div class="toggles">
@@ -336,6 +340,7 @@ let visibleGroups = new Set(["leads", "purchases", "cr", "schedules", "arrivals"
 const COLUMNS = [
   { key: "account",   label: "Account",        group: null,        type: "text",   cls: "col-account" },
   { key: "client",    label: "Client",          group: null,        type: "text",   cls: "col-client" },
+  { key: "treatment", label: "Treatment",       group: null,        type: "text",   cls: "col-treatment" },
   { key: "campaign",  label: "Campaign",        group: null,        type: "text",   cls: "col-campaign" },
   { key: "ad",        label: "Ad",              group: null,        type: "text",   cls: "col-ad" },
   { key: "spend",     label: "Spend",           group: null,        type: "money",  cls: "text-right" },
@@ -403,11 +408,13 @@ function getFilteredData() {
   if (!DATA) return [];
   const search = document.getElementById("search").value.toLowerCase();
   const account = document.getElementById("account-filter").value;
+  const treatment = document.getElementById("treatment-filter").value;
 
   return DATA.ads.filter(ad => {
     if (account && ad.account !== account) return false;
+    if (treatment && ad.treatment !== treatment) return false;
     if (search) {
-      const haystack = `${ad.account} ${ad.client} ${ad.campaign} ${ad.ad}`.toLowerCase();
+      const haystack = `${ad.account} ${ad.client} ${ad.treatment} ${ad.campaign} ${ad.ad}`.toLowerCase();
       return haystack.includes(search);
     }
     return true;
@@ -489,20 +496,30 @@ function updateSummary(ads) {
   }
 }
 
-function populateAccountFilter() {
+function populateFilters() {
   const accounts = [...new Set(DATA.ads.map(a => a.account))].sort();
-  const select = document.getElementById("account-filter");
+  const accountSelect = document.getElementById("account-filter");
   accounts.forEach(name => {
     const opt = document.createElement("option");
     opt.value = name;
     opt.textContent = name;
-    select.appendChild(opt);
+    accountSelect.appendChild(opt);
+  });
+
+  const treatments = [...new Set(DATA.ads.map(a => a.treatment).filter(t => t && t !== "Unknown"))].sort();
+  const treatmentSelect = document.getElementById("treatment-filter");
+  treatments.forEach(name => {
+    const opt = document.createElement("option");
+    opt.value = name;
+    opt.textContent = name;
+    treatmentSelect.appendChild(opt);
   });
 }
 
 // Event listeners
 document.getElementById("search").addEventListener("input", renderTable);
 document.getElementById("account-filter").addEventListener("change", renderTable);
+document.getElementById("treatment-filter").addEventListener("change", renderTable);
 
 document.getElementById("thead").addEventListener("click", e => {
   const th = e.target.closest("th");
@@ -538,7 +555,7 @@ fetch("data.json")
     DATA = data;
     document.getElementById("meta-info").textContent =
       `Last updated: ${new Date(data.updated).toLocaleString()} · Date range: ${data.date_range.since} to ${data.date_range.until} · ${data.total_ads} ads`;
-    populateAccountFilter();
+    populateFilters();
     renderTable();
   })
   .catch(err => {

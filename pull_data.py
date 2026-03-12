@@ -96,6 +96,35 @@ def extract_client(campaign_name):
     return campaign_name[:40]
 
 
+def extract_treatment(campaign_name):
+    """Extract treatment name from campaign.
+    Pattern: 'PREFIX - $XX.XX (valued $XXX) Treatment Name | Client | ...'
+    """
+    # Get the first segment (before first |)
+    first_segment = campaign_name.split("|")[0].strip()
+
+    # Remove known prefixes first so price pattern matching works on all formats
+    # Handles: Arrival, (GHL), (LTB), FTB, LTB, TEST, M, DTB, ADV, NATIVE, SPAN, FORM, AD TEST, PARIE, LT B
+    first_segment = re.sub(
+        r'^(?:Arrival\s*)?(?:\((?:GHL|LTB)\)\s*)?(?:(?:AD\s+TEST|TEST|NATIVE|SPAN|FORM|FTB|LTB|LT\s*B|DTB|ADV|PARIE|M)\s*[-–]\s*)*',
+        '', first_segment, flags=re.IGNORECASE
+    ).strip()
+
+    # Remove everything up to and including the closing parenthesis of the price
+    # Handles: (valued $377), ($377 Value), (Valued $377), (valued $ 3,770)
+    match = re.search(r'\([^)]*\)\s*', first_segment)
+    if match:
+        treatment = first_segment[match.end():].strip()
+        if treatment:
+            # Clean up extra whitespace
+            treatment = re.sub(r'\s+', ' ', treatment).strip()
+            # Remove trailing date/tag patterns like "- 2/23" or "-12/18"
+            treatment = re.sub(r'\s*-\s*\d{1,2}/\d{1,2}$', '', treatment).strip()
+            return treatment if treatment else "Unknown"
+
+    return "Unknown"
+
+
 def fetch_ad_statuses(account_id, token):
     """Fetch effective_status for all ads in an account."""
     cmd = [
@@ -203,6 +232,7 @@ def fetch_account_data(account_id, account_info, token, since, until):
         ads.append({
             "account": account_info["name"],
             "client": extract_client(campaign_name),
+            "treatment": extract_treatment(campaign_name),
             "campaign": campaign_name,
             "campaign_status": campaign_status,
             "ad": ad_name,
