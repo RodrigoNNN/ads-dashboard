@@ -9,32 +9,32 @@
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: #0f1117;
-    color: #e4e4e7;
+    background: #f8f9fb;
+    color: #1e293b;
     min-height: 100vh;
   }
 
   .header {
-    background: #16181d;
-    border-bottom: 1px solid #2a2d35;
+    background: #fff;
+    border-bottom: 1px solid #e2e8f0;
     padding: 20px 24px;
   }
 
   .header h1 {
     font-size: 22px;
     font-weight: 600;
-    color: #fff;
+    color: #0f172a;
     margin-bottom: 4px;
   }
 
   .header .meta {
     font-size: 13px;
-    color: #71717a;
+    color: #94a3b8;
   }
 
   .controls {
-    background: #16181d;
-    border-bottom: 1px solid #2a2d35;
+    background: #fff;
+    border-bottom: 1px solid #e2e8f0;
     padding: 16px 24px;
     display: flex;
     flex-wrap: wrap;
@@ -51,10 +51,10 @@
   .search-box input {
     width: 100%;
     padding: 10px 14px 10px 38px;
-    background: #1e2028;
-    border: 1px solid #2a2d35;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
     border-radius: 8px;
-    color: #e4e4e7;
+    color: #1e293b;
     font-size: 14px;
     outline: none;
     transition: border-color 0.2s;
@@ -73,10 +73,10 @@
 
   .filter-select {
     padding: 10px 14px;
-    background: #1e2028;
-    border: 1px solid #2a2d35;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
     border-radius: 8px;
-    color: #e4e4e7;
+    color: #1e293b;
     font-size: 14px;
     outline: none;
     cursor: pointer;
@@ -86,8 +86,8 @@
   .filter-select:focus { border-color: #6366f1; }
 
   .toggles {
-    background: #16181d;
-    border-bottom: 1px solid #2a2d35;
+    background: #fff;
+    border-bottom: 1px solid #e2e8f0;
     padding: 12px 24px;
     display: flex;
     flex-wrap: wrap;
@@ -99,9 +99,9 @@
     border-radius: 20px;
     font-size: 12px;
     font-weight: 500;
-    border: 1px solid #2a2d35;
-    background: #1e2028;
-    color: #a1a1aa;
+    border: 1px solid #e2e8f0;
+    background: #f1f5f9;
+    color: #64748b;
     cursor: pointer;
     transition: all 0.2s;
     user-select: none;
@@ -116,12 +116,12 @@
   .toggle-btn:hover { border-color: #6366f1; }
 
   .summary-bar {
-    background: #1a1c23;
+    background: #fff;
     padding: 14px 24px;
     display: flex;
     flex-wrap: wrap;
     gap: 24px;
-    border-bottom: 1px solid #2a2d35;
+    border-bottom: 1px solid #e2e8f0;
   }
 
   .stat {
@@ -132,7 +132,7 @@
 
   .stat-label {
     font-size: 11px;
-    color: #71717a;
+    color: #94a3b8;
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
@@ -140,11 +140,11 @@
   .stat-value {
     font-size: 20px;
     font-weight: 700;
-    color: #fff;
+    color: #0f172a;
   }
 
-  .stat-value.green { color: #22c55e; }
-  .stat-value.red { color: #ef4444; }
+  .stat-value.green { color: #16a34a; }
+  .stat-value.red { color: #dc2626; }
 
   .table-wrapper {
     overflow-x: auto;
@@ -165,15 +165,15 @@
   }
 
   th {
-    background: #1a1c23;
+    background: #f8f9fb;
     padding: 10px 12px;
     text-align: left;
     font-weight: 600;
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: #a1a1aa;
-    border-bottom: 2px solid #2a2d35;
+    color: #64748b;
+    border-bottom: 2px solid #e2e8f0;
     cursor: pointer;
     white-space: nowrap;
     user-select: none;
@@ -186,19 +186,19 @@
 
   td {
     padding: 10px 12px;
-    border-bottom: 1px solid #1e2028;
+    border-bottom: 1px solid #f1f5f9;
     white-space: nowrap;
   }
 
-  tr:hover td { background: #1a1c23; }
+  tr:hover td { background: #f1f5f9; }
 
   .text-right { text-align: right; }
 
-  .col-account { max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
-  .col-client { max-width: 140px; overflow: hidden; text-overflow: ellipsis; font-weight: 600; color: #fff; }
-  .col-treatment { max-width: 160px; overflow: hidden; text-overflow: ellipsis; color: #a78bfa; font-size: 12px; }
-  .col-campaign { max-width: 200px; overflow: hidden; text-overflow: ellipsis; font-size: 12px; color: #71717a; }
-  .col-ad { max-width: 180px; overflow: hidden; text-overflow: ellipsis; }
+  .col-account { max-width: 120px; overflow: hidden; text-overflow: ellipsis; color: #64748b; }
+  .col-client { max-width: 140px; overflow: hidden; text-overflow: ellipsis; font-weight: 600; color: #0f172a; }
+  .col-treatment { max-width: 160px; overflow: hidden; text-overflow: ellipsis; color: #7c3aed; font-size: 12px; }
+  .col-campaign { max-width: 200px; overflow: hidden; text-overflow: ellipsis; font-size: 12px; color: #94a3b8; }
+  .col-ad { max-width: 180px; overflow: hidden; text-overflow: ellipsis; color: #334155; }
 
   .status-dot {
     display: inline-block;
@@ -211,51 +211,51 @@
     top: -1px;
   }
 
-  .status-active { background: #22c55e; box-shadow: 0 0 4px rgba(34, 197, 94, 0.5); }
-  .status-paused { background: #ef4444; box-shadow: 0 0 4px rgba(239, 68, 68, 0.4); }
-  .status-other { background: #52525b; }
+  .status-active { background: #16a34a; box-shadow: 0 0 4px rgba(22, 163, 74, 0.4); }
+  .status-paused { background: #dc2626; box-shadow: 0 0 4px rgba(220, 38, 38, 0.3); }
+  .status-other { background: #94a3b8; }
 
   .badge-green {
-    background: rgba(34, 197, 94, 0.15);
-    color: #22c55e;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-weight: 600;
+    background: #dcfce7;
+    color: #15803d;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-weight: 700;
   }
 
   .badge-red {
-    background: rgba(239, 68, 68, 0.15);
-    color: #ef4444;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-weight: 600;
+    background: #fee2e2;
+    color: #b91c1c;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-weight: 700;
   }
 
   .badge-gray {
-    color: #52525b;
+    color: #cbd5e1;
     font-size: 11px;
   }
 
-  .metric-count { color: #e4e4e7; font-weight: 600; }
-  .metric-cost { color: #a1a1aa; font-size: 12px; }
+  .metric-count { color: #1e293b; font-weight: 600; }
+  .metric-cost { color: #64748b; font-size: 12px; }
 
   .loading {
     text-align: center;
     padding: 60px;
-    color: #71717a;
+    color: #94a3b8;
     font-size: 16px;
   }
 
   .no-results {
     text-align: center;
     padding: 40px;
-    color: #52525b;
+    color: #94a3b8;
     font-size: 14px;
   }
 
   .kpi-target {
     font-size: 10px;
-    color: #52525b;
+    color: #94a3b8;
     font-weight: 400;
   }
 
